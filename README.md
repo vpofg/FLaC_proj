@@ -49,3 +49,34 @@ Generate HTML output for various Markdown elements.
 - Syntax highlighting on given language for code blocks with [Prism.js](https://prismjs.com/)
 - Parse LaTeX style notation to [MathML](https://developer.mozilla.org/en-US/docs/Web/MathML)
 
+### Test Input Markdown String
+
+**bold**
+<br/>
+<br/>
+*italic*
+<br/>
+<br/>
+~~Strikethrough~~
+<br/>
+<br/>
+This is an example of an inline code block `def function`
+<br/>
+<br/>
+[Hyperlink](https://github.com/vpofg/FLaC_proj)
+<br/>
+# Title
+## Subtitle
+### Header 3
+#### Header 4
+##### Header 5
+###### Header 6
+- item
+1. item
+1.item
+---
+```
+fenced code block
+```
+
+
