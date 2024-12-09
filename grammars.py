@@ -1,10 +1,10 @@
-import re 
+import re
 
 
 TEXT_FORMATTING = {
-    'bold': re.compile(r'\*\*(.*?)\*\*'),
-    'italic': re.compile(r'\*(.*?)\*'),
-    'underline': re.compile(r'__(.*?)__'),
+    'b': re.compile(r'\*\*(.*?)\*\*'),
+    'i': re.compile(r'\*(.*?)\*'),
+    'u': re.compile(r'__(.*?)__'),
     'strikethrough': re.compile(r'~~(.*?)~~'),
     'code': re.compile(r'`(.*?)`'),
     'code_block': re.compile(r'```(.*?)```'),
@@ -34,7 +34,7 @@ BLOCKS = {
 
 def parse_text_formatting(text):
     for key, value in TEXT_FORMATTING.items():
-        text = value.sub(f'<{key}>\g<1></{key}>', text)
+        text = value.sub(rf'<{key}> \g<1></{key}>', text)
     print(text)
 
 parse_text_formatting("**bold** *italic* __underline__ ~~strikethrough~~ `code` ```code_block``` >quote [link](https://www.google.com) ![image](https://www.google.com)")
