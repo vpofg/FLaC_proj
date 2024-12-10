@@ -78,7 +78,6 @@ function markdownToHtml(markdown) {
         function isValidMarkdown(text) {
             const stack = [];
             const markers = ['*', '**', '~', '~~', '`'];
-
             for (let i = 0; i < text.length; i++) {
                 for (let marker of markers) {
                     if (text.slice(i, i + marker.length) === marker) {
@@ -140,8 +139,8 @@ function markdownToHtml(markdown) {
     markdown = markdown.replace(/\*(.*?)\*/g, '<em>$1</em>');
     markdown = markdown.replace(/~~(.*?)~~/g, '<del>$1</del>');
 
-    markdown = markdown.replace(/^(>+)\s+(.*)$/gm, (_, level, content) => {
-        return `<blockquote>${content}</blockquote>`.repeat(level.length);
+    markdown = markdown.replace(/^(>+)\s+(.*?)$/gm, (_, level, content) => {
+        return `</blockquote>${content}</blockquote>`.repeat(level.length);
     });
 
     markdown = markdown.replace(/^[\-\*]\s+(.*)$/gm, '<ul><li>$1</li></ul>');

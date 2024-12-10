@@ -22,7 +22,7 @@ Generate HTML output for various Markdown elements.
 |                       | `*italic*` or `_italic_` | `<em>`                                                            | Italic text           |DONE ✅     |
 |                       | `~~strikethrough~~`      | `<del>`                                                           | Strikethrough text    |DONE ✅     |
 |                       | `` `inline code` ``      | `<code>`                                                          | Inline code           |DONE ✅     |
-|                       | `[text](url)`            | `<a href="url">text</a>`                                          | Hyperlink             |TODO🟠      |
+|                       | `[text](url)`            | `<a href="url">text</a>`                                          | Hyperlink             |DONE ✅      |
 |                       | `![alt text](image.jpg)` | `<img src="image.jpg" alt="alt text">`                            | Image                 |TODO🟠      |
 |                       | `:emoji:`                | Unicode emoji (e.g., 😊)                                          | Emoji shorthand       |TODO🟠      |
 | **Headings**          | `# Header 1`             | `<h1>`                                                            | Header level 1        |DONE ✅     |
@@ -74,9 +74,10 @@ This is an example of an inline code block `def function`
 - item
 1. item
 1.item
+<br/>
+<br/>
+Horizontal rule:
 ---
 ```
 fenced code block
 ```
-
-
