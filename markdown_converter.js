@@ -74,7 +74,6 @@ function markdownToHtml(markdown) {
   function validateMarkdown(md) {
     const errors = [];
 
-    // Helper to check balanced and nested markers
     function isValidMarkdown(text) {
       const stack = [];
       const markers = ["*", "**", "~", "~~", "`"];
@@ -94,7 +93,6 @@ function markdownToHtml(markdown) {
       return stack.length === 0;
     }
 
-    // Detect unbalanced markers
     if (!isValidMarkdown(md)) {
       errors.push("Unbalanced Markdown markers detected.");
     }
@@ -111,8 +109,8 @@ function markdownToHtml(markdown) {
       /`.*?`/,
       /^(\-|\*|\+)\s+.+/m,
       /^\d+\.\s+.+/m,
-      /\[.*?\]\(.*?\)/,
-      /!\[.*?\]\(.*?\)/,
+      /$begin:math:display$.*?$end:math:display$$begin:math:text$.*?$end:math:text$/,
+      /!$begin:math:display$.*?$end:math:display$$begin:math:text$.*?$end:math:text$/,
     ];
 
     return markdownPatterns.some((pattern) => pattern.test(inputText));
@@ -131,6 +129,20 @@ function markdownToHtml(markdown) {
     return { html: "", errors };
   }
 
+  const emojiMap = {
+    "smile": "😄",
+    "heart": "❤️",
+    "thumbs_up": "👍",
+    "wink": "😉",
+    "clap": "👏",
+    "star": "⭐",
+    // Add more 
+  };
+
+  const pattern = /:([a-zA-Z0-9_]+):/g; 
+  markdown = markdown.replace(pattern, (match, code) => {
+    return emojiMap[code] || match;
+  });
   markdown = markdown.replace(/^#{6}\s(.*)$/gm, "<h6>$1</h6>");
   markdown = markdown.replace(/^#{5}\s(.*)$/gm, "<h5>$1</h5>");
   markdown = markdown.replace(/^#{4}\s(.*)$/gm, "<h4>$1</h4>");
@@ -163,7 +175,8 @@ function markdownToHtml(markdown) {
     '<img src="$2" alt="$1">',
   );
 
-  markdown = markdown.replace(/```([^`]+)```/g, "<pre><code>$1</code></pre>");
+  // Handle fenced code blocks with language specification for Prism.js
+  markdown = markdown.replace(/```(\w+)\n([\s\S]*?)```/g, "<pre><code class=\"language-$1\">$2</code></pre>");
   markdown = markdown.replace(/`([^`]+)`/g, "<code>$1</code>");
 
   markdown = markdown.replace(/^---$|^\*\*\*$|^___$/gm, "<hr>");
@@ -191,6 +204,18 @@ function markdownToHtml(markdown) {
     },
   );
 
+  // Handle task lists
+  markdown = markdown.replace(/- \[ \] (.*)/g, '<ul><li><input type="checkbox">$1</li></ul>');
+  markdown = markdown.replace(/- \[x\] (.*)/g, '<ul><li><input type="checkbox" checked>$1</li></ul>');
+
+  // Handle LaTeX-style math
+  markdown = markdown.replace(/\$\$(.*?)\$\$/g, (_, math) => {
+    return `\\[${math}\\]`;
+  });
+  markdown = markdown.replace(/\$(.*?)\$/g, (_, math) => {
+    return `\\(${math}\\)`;
+  });
+
   markdown = markdown.replace(/<([^>]+)>/g, "<$1>");
 
   return { html: markdown, errors: [] };
@@ -206,5 +231,7 @@ document.getElementById("convertButton").addEventListener("click", () => {
   } else {
     document.getElementById("htmlPreview").innerHTML = html;
     document.getElementById("errorMessage").innerHTML = "";
+    Prism.highlightAll();
+    MathJax.typeset();
   }
 });
