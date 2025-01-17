@@ -69,80 +69,20 @@ document.body.innerHTML = `
 `;
 
 function markdownToHtml(markdown) {
-  let errors = [];
+//   const emojiMap = {
+//     "smile": "😄",
+//     "heart": "❤️",
+//     "thumbs_up": "👍",
+//     "wink": "😉",
+//     "clap": "👏",
+//     "star": "⭐",
+//   };
 
-  function validateMarkdown(md) {
-    const errors = [];
+//   const pattern = /:([a-zA-Z0-9_]+):/g;
+//   markdown = markdown.replace(pattern, (match, code) => {
+//     return emojiMap[code] || match;
+//   });
 
-    function isValidMarkdown(text) {
-      const stack = [];
-      const markers = ["*", "**", "~", "~~", "`"];
-      for (let i = 0; i < text.length; i++) {
-        for (let marker of markers) {
-          if (text.slice(i, i + marker.length) === marker) {
-            if (stack.length > 0 && stack[stack.length - 1] === marker) {
-              stack.pop(); // Closing marker
-            } else {
-              stack.push(marker); // Opening marker
-            }
-            i += marker.length - 1;
-            break;
-          }
-        }
-      }
-      return stack.length === 0;
-    }
-
-    if (!isValidMarkdown(md)) {
-      errors.push("Unbalanced Markdown markers detected.");
-    }
-
-    return errors;
-  }
-
-  function isMarkdown(inputText) {
-    const markdownPatterns = [
-      /^#{1,6}\s+/m,
-      /\*\*.*?\*\*/,
-      /\*.*?\*/,
-      /~~.*?~~/,
-      /`.*?`/,
-      /^(\-|\*|\+)\s+.+/m,
-      /^\d+\.\s+.+/m,
-      /$begin:math:display$.*?$end:math:display$$begin:math:text$.*?$end:math:text$/,
-      /!$begin:math:display$.*?$end:math:display$$begin:math:text$.*?$end:math:text$/,
-    ];
-
-    return markdownPatterns.some((pattern) => pattern.test(inputText));
-  }
-
-  if (!isMarkdown(markdown)) {
-    return {
-      html: "",
-      errors: ["The input does not contain valid Markdown syntax."],
-    };
-  }
-
-  errors = validateMarkdown(markdown);
-
-  if (errors.length > 0) {
-    return { html: "", errors };
-  }
-
-  const emojiMap = {
-    "smile": "😄",
-    "heart": "❤️",
-    "thumbs_up": "👍",
-    "wink": "😉",
-    "clap": "👏",
-    "star": "⭐",
-    // Add more 
-  };
-
-  const pattern = /:([a-zA-Z0-9_]+):/g; 
-  markdown = markdown.replace(pattern, (match, code) => {
-    return emojiMap[code] || match;
-  });
   markdown = markdown.replace(/^#{6}\s(.*)$/gm, "<h6>$1</h6>");
   markdown = markdown.replace(/^#{5}\s(.*)$/gm, "<h5>$1</h5>");
   markdown = markdown.replace(/^#{4}\s(.*)$/gm, "<h4>$1</h4>");
