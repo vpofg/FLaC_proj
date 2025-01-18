@@ -69,20 +69,6 @@ document.body.innerHTML = `
 `;
 
 function markdownToHtml(markdown) {
-//   const emojiMap = {
-//     "smile": "😄",
-//     "heart": "❤️",
-//     "thumbs_up": "👍",
-//     "wink": "😉",
-//     "clap": "👏",
-//     "star": "⭐",
-//   };
-
-//   const pattern = /:([a-zA-Z0-9_]+):/g;
-//   markdown = markdown.replace(pattern, (match, code) => {
-//     return emojiMap[code] || match;
-//   });
-
   markdown = markdown.replace(/^#{6}\s(.*)$/gm, "<h6>$1</h6>");
   markdown = markdown.replace(/^#{5}\s(.*)$/gm, "<h5>$1</h5>");
   markdown = markdown.replace(/^#{4}\s(.*)$/gm, "<h4>$1</h4>");
@@ -90,10 +76,14 @@ function markdownToHtml(markdown) {
   markdown = markdown.replace(/^#{2}\s(.*)$/gm, "<h2>$1</h2>");
   markdown = markdown.replace(/^#\s(.*)$/gm, "<h1>$1</h1>");
 
+  // Handle bold and italic text
   markdown = markdown.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+  markdown = markdown.replace(/__(.*?)__/g, "<strong>$1</strong>");
   markdown = markdown.replace(/\*(.*?)\*/g, "<em>$1</em>");
+  markdown = markdown.replace(/_(.*?)_/g, "<em>$1</em>");
   markdown = markdown.replace(/~~(.*?)~~/g, "<del>$1</del>");
 
+  // Handle blockquotes
   markdown = markdown.replace(/^(>+)\s(.*)$/gm, (match, level, content) => {
     const depth = level.length;
     let blockquote = "<blockquote>".repeat(depth);
@@ -102,18 +92,25 @@ function markdownToHtml(markdown) {
     return blockquote;
   });
 
-  markdown = markdown.replace(/^[\-\*]\s+(.*)$/gm, "<ul><li>$1</li></ul>");
-  markdown = markdown.replace(/<\/ul>\s*<ul>/g, "");
+  // Handle task lists
+  markdown = markdown.replace(/- \[ \] (.*)/g, '<ul><li><input type="checkbox">$1</li></ul>');
+  markdown = markdown.replace(/- \[x\] (.*)/g, '<ul><li><input type="checkbox" checked>$1</li></ul>');
 
-  markdown = markdown.replace(/^\d+\.\s+(.*)$/gm, "<ol><li>$1</li></ol>");
-  markdown = markdown.replace(/<\/ol>\s*<ol>/g, "");
+  // Handle nested lists
+  markdown = markdown.replace(/^\s*([\-\*])\s+(.*)$/gm, (match, bullet, content) => {
+    return `<ul><li>${content}</li></ul>`;
+  });
+  markdown = markdown.replace(/<\/ul>\n<ul>/g, "");
+
+  markdown = markdown.replace(/^\s*\d+\.\s+(.*)$/gm, (match, content) => {
+    return `<ol><li>${content}</li></ol>`;
+  });
+  markdown = markdown.replace(/<\/ol>\n<ol>/g, "");
 
   markdown = markdown.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
 
-  markdown = markdown.replace(
-    /!\[(.*?)\]\((.*?)\)/g,
-    '<img src="$2" alt="$1">',
-  );
+  // Handle images
+  markdown = markdown.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">');
 
   // Handle fenced code blocks with language specification for Prism.js
   markdown = markdown.replace(/```(\w+)\n([\s\S]*?)```/g, "<pre><code class=\"language-$1\">$2</code></pre>");
@@ -143,10 +140,6 @@ function markdownToHtml(markdown) {
       return `<table><thead><tr>${headers}</tr></thead><tbody>${body}</tbody></table>`;
     },
   );
-
-  // Handle task lists
-  markdown = markdown.replace(/- \[ \] (.*)/g, '<ul><li><input type="checkbox">$1</li></ul>');
-  markdown = markdown.replace(/- \[x\] (.*)/g, '<ul><li><input type="checkbox" checked>$1</li></ul>');
 
   // Handle LaTeX-style math
   markdown = markdown.replace(/\$\$(.*?)\$\$/g, (_, math) => {
