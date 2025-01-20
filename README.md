@@ -51,44 +51,80 @@ Generate HTML output for various Markdown elements.
 
 ### Test Input Markdown String
 
-**bold**
-<br/>
-<br/>
-*italic*
-<br/>
-<br/>
-~~Strikethrough~~
-<br/>
-<br/>
-This is an example of an inline code block `def function`
-<br/>
-<br/>
-[Hyperlink](https://github.com/vpofg/FLaC_proj)
-<br/>
-# Title
-## Subtitle
-### Header 3
-#### Header 4
-##### Header 5
-###### Header 6
-- item
-1. item
-1.item
-<br/>
-<br/>
-Horizontal rule:
----
+# Markdown-to-HTML Converter Test
 
-Here is some inline math: $E = mc^2$
-</br>
-Here is a block of code:
-</br>
+## Text Formatting
+
+**Bold text using double asterisks**<br/>
+__Bold text using double underscores__<br/>
+<br/>
+*Italic text using single asterisks*<br/>
+_Italic text using single underscores_<br/>
+<br/>
+~~Strikethrough text~~<br/>
+<br/>
+Inline code: `inline code`<br/>
+<br/>
+[Hyperlink to GitHub](https://github.com/vpofg/FLaC_proj)<br/>
+<br/>
+![Alt text for image](https://via.placeholder.com/150)<br/>
+<br/>
+😊 Unicode emoji<br/>
+<br/>
+
+## Headings
+
+# Header 1<br/>
+## Header 2<br/>
+### Header 3<br/>
+#### Header 4<br/>
+##### Header 5<br/>
+###### Header 6<br/>
+<br/>
+
+## Lists
+
+### Unordered List
+
+- Item 1<br/>
+- Item 2<br/>
+  - Subitem 2.1<br/>
+  - Subitem 2.2<br/>
+<br/>
+
+### Ordered List
+
+1. Item 1<br/>
+2. Item 2<br/>
+   1. Subitem 2.1<br/>
+   2. Subitem 2.2<br/>
+<br/>
+
+### Task Lists
+
+- [ ] Task 1<br/>
+- [x] Completed Task<br/>
+<br/>
+
+## Blocks
+
+> This is a blockquote<br/>
+<br/>
+---
+<br/>
+
+### Fenced Code Block with Syntax Highlights
+
 ```javascript
 function helloWorld() {
     console.log("Hello, world!");
 }
-```
-
-Here is a display math block:
-
+``` 
+</br>
+## Advanced Features
+### LaTeX-style Math
+Inline math: $E = mc^2$
+<br/><br/> 
+Display math:
+<br/> 
 $$\int_{a}^{b} x^2 dx$$
