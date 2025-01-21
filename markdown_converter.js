@@ -69,22 +69,22 @@ document.body.innerHTML = `
 `;
 
 function markdownToHtml(markdown) {
-  markdown = markdown.replace(/^#{6}\s(.*)$/gm, "<h6>$1</h6>");
-  markdown = markdown.replace(/^#{5}\s(.*)$/gm, "<h5>$1</h5>");
-  markdown = markdown.replace(/^#{4}\s(.*)$/gm, "<h4>$1</h4>");
-  markdown = markdown.replace(/^#{3}\s(.*)$/gm, "<h3>$1</h3>");
-  markdown = markdown.replace(/^#{2}\s(.*)$/gm, "<h2>$1</h2>");
-  markdown = markdown.replace(/^#\s(.*)$/gm, "<h1>$1</h1>");
+  markdown = markdown.replace(/^#{6}\s(.*)$/gm, "<h6>$1</h6>"); // Handle h6 headers
+  markdown = markdown.replace(/^#{5}\s(.*)$/gm, "<h5>$1</h5>"); // Handle h5 headers
+  markdown = markdown.replace(/^#{4}\s(.*)$/gm, "<h4>$1</h4>"); // Handle h4 headers
+  markdown = markdown.replace(/^#{3}\s(.*)$/gm, "<h3>$1</h3>"); // Handle h3 headers
+  markdown = markdown.replace(/^#{2}\s(.*)$/gm, "<h2>$1</h2>"); // Handle h2 headers
+  markdown = markdown.replace(/^#\s(.*)$/gm, "<h1>$1</h1>"); // Handle h1 headers
 
   // Handle bold and italic text
-  markdown = markdown.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-  markdown = markdown.replace(/__(.*?)__/g, "<strong>$1</strong>");
-  markdown = markdown.replace(/\*(.*?)\*/g, "<em>$1</em>");
-  markdown = markdown.replace(/_(.*?)_/g, "<em>$1</em>");
-  markdown = markdown.replace(/~~(.*?)~~/g, "<del>$1</del>");
+  markdown = markdown.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>"); // Handle bold text
+  markdown = markdown.replace(/__(.*?)__/g, "<strong>$1</strong>"); // Handle bold text
+  markdown = markdown.replace(/\*(.*?)\*/g, "<em>$1</em>"); // Handle italic text
+  markdown = markdown.replace(/_(.*?)_/g, "<em>$1</em>"); // Handle italic text 
+  markdown = markdown.replace(/~~(.*?)~~/g, "<del>$1</del>"); // Handle strikethrough text
 
   // Handle blockquotes
-  markdown = markdown.replace(/^(>+)\s(.*)$/gm, (match, level, content) => {
+  markdown = markdown.replace(/^(>+)\s(.*)$/gm, (match, level, content) => { 
     const depth = level.length;
     let blockquote = "<blockquote>".repeat(depth);
     blockquote += content.trim();
@@ -117,29 +117,6 @@ function markdownToHtml(markdown) {
   markdown = markdown.replace(/`([^`]+)`/g, "<code>$1</code>");
 
   markdown = markdown.replace(/^---$|^\*\*\*$|^___$/gm, "<hr>");
-
-  markdown = markdown.replace(
-    /^\|(.+)\|\n\|([-:\s]+)\|\n((\|.*\|\n)+)/gm,
-    (match, header, align, rows) => {
-      const headers = header
-        .trim()
-        .split("|")
-        .map((h) => `<th>${h.trim()}</th>`)
-        .join("");
-      const body = rows
-        .trim()
-        .split("\n")
-        .map((row) => {
-          return `<tr>${row
-            .trim()
-            .split("|")
-            .map((cell) => `<td>${cell.trim()}</td>`)
-            .join("")}</tr>`;
-        })
-        .join("");
-      return `<table><thead><tr>${headers}</tr></thead><tbody>${body}</tbody></table>`;
-    },
-  );
 
   // Handle LaTeX-style math
   markdown = markdown.replace(/\$\$(.*?)\$\$/g, (_, math) => {

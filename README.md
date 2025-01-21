@@ -67,7 +67,7 @@ Inline code: `inline code`<br/>
 <br/>
 [Hyperlink to GitHub](https://github.com/vpofg/FLaC_proj)<br/>
 <br/>
-![Alt text for image](https://via.placeholder.com/150)<br/>
+![Linux](Linux.png)<br/>
 <br/>
 😊 Unicode emoji<br/>
 <br/>
