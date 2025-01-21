@@ -105,18 +105,19 @@ function markdownToHtml(markdown) {
   markdown = markdown.replace(/^\s*\d+\.\s+(.*)$/gm, (match, content) => {
     return `<ol><li>${content}</li></ol>`;
   });
-  markdown = markdown.replace(/<\/ol>\n<ol>/g, "");
+  markdown = markdown.replace(/<\/ol>\n<ol>/g, ""); 
 
-  markdown = markdown.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+  markdown = markdown.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>'); // Handle links
 
   // Handle images
-  markdown = markdown.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">');
+  markdown = markdown.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">'); 
 
   // Handle fenced code blocks with language specification for Prism.js
   markdown = markdown.replace(/```(\w+)\n([\s\S]*?)```/g, "<pre><code class=\"language-$1\">$2</code></pre>");
   markdown = markdown.replace(/`([^`]+)`/g, "<code>$1</code>");
 
-  markdown = markdown.replace(/^---$|^\*\*\*$|^___$/gm, "<hr>");
+  // Handle horizontal rules
+  markdown = markdown.replace(/^---$|^\*\*\*$|^___$/gm, "<hr>"); 
 
   // Handle LaTeX-style math
   markdown = markdown.replace(/\$\$(.*?)\$\$/g, (_, math) => {
@@ -126,8 +127,7 @@ function markdownToHtml(markdown) {
     return `\\(${math}\\)`;
   });
 
-  markdown = markdown.replace(/<([^>]+)>/g, "<$1>");
-
+  markdown = markdown.replace(/<([^>]+)>/g, "<$1>"); // Handle inline HTML
   return { html: markdown, errors: [] };
 }
 
