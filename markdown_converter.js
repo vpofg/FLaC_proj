@@ -1,3 +1,4 @@
+
 document.body.innerHTML = `
     <style>
         body {
@@ -186,6 +187,45 @@ function markdownToHtml(markdown) {
         });
     }
 
+    function formatFootnotes(md) {
+        const footnotes = {}; // Store footnote definitions
+        const usedFootnotes = new Set(); // Track used references
+    
+        // Extract footnote definitions
+        md = md.replace(/\[\^(.*?)\]:(.*)/g, (_, label, definition) => {
+            footnotes[label] = definition.trim();
+            return ""; // Remove definitions from the main text
+        });
+    
+        // Replace footnote references in the text
+        md = md.replace(/\[\^(.*?)\]/g, (_, label) => {
+            usedFootnotes.add(label);
+            if (footnotes[label]) {
+                return `<sup id="ref-${label}"><a href="#footnote-${label}" title="${footnotes[label]}">[${label}]</a></sup>`;
+            } else {
+                return `<sup id="ref-${label}" style="color: red;">[${label} - Undefined]</sup>`;
+            }
+        });
+    
+        // Generate footnote definitions section
+        if (usedFootnotes.size > 0) {
+            let footnoteSection = `<hr><h3>Footnotes</h3><ol>`;
+            usedFootnotes.forEach((label) => {
+                if (footnotes[label]) {
+                    footnoteSection += `
+                        <li id="footnote-${label}">
+                            ${footnotes[label]} 
+                            <a href="#ref-${label}" title="Back to reference">↩</a>
+                        </li>`;
+                }
+            });
+            footnoteSection += `</ol>`;
+            md += footnoteSection;
+        }
+    
+        return md;
+    }
+
     function checkMarkers(lines) {
         const markers = ["*", "**", "_", "__", "~", "~~", "`"]; // Supported markers
         const errors = []; // To store lines with errors
@@ -246,7 +286,7 @@ function markdownToHtml(markdown) {
 
     // }
 
-    errors = checkMarkers(lines);
+    //errors = checkMarkers(lines);
 
     if (errors.length > 0) {
         return { html: "", errors };
@@ -256,6 +296,7 @@ function markdownToHtml(markdown) {
     markdown = formatTables(markdown);
     markdown = formatBlockquotes(markdown);
     markdown = formatTaskLists(markdown);
+    markdown = formatFootnotes(markdown);
 
     const emojiMap = {
         smile: "😄",
@@ -319,7 +360,7 @@ function markdownToHtml(markdown) {
     markdown = markdown.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">');
 
     // Replace footnotes
-    markdown = markdown.replace(/\[\^(.*?)\]:(.*)/g, '<sup id="footnote-$1">[$1]</sup>: $2');
+    //markdown = markdown.replace(/\[\^(.*?)\]:(.*)/g, '<sup id="footnote-$1">[$1]</sup>: $2');
 
     // Replace fenced code blocks
     markdown = markdown.replace(/```(\w+)\n([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>');
@@ -370,4 +411,6 @@ document.getElementById("convertButton").addEventListener("click", () => {
         document.getElementById("htmlPreview").innerHTML = html;
         document.getElementById("errorMessage").innerHTML = "";
     }
+    Prism.highlightAll();
+    MathJax.typeset();
 });
