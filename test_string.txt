@@ -58,13 +58,6 @@ This is really***very***important text.
 + Third item
 + Fourth item
 
-- First item
-- Second item
-- Third item
-    - Indented item
-    - Indented item
-- Fourth item
-
 1. Open the file containing the Linux mascot.
 2. Marvel at its beauty.
 
@@ -85,7 +78,7 @@ See the section on [`code`](#code).
 | Header      | Title       |
 | Paragraph   | Text        |
 
-```
+```json
 {
   "firstName": "John",
   "lastName": "Smith",
