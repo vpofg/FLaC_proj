@@ -58,6 +58,11 @@ This is really***very***important text.
 + Third item
 + Fourth item
 
+* First item
+* Second item
+* Third item
+* Fourth item
+
 1. Open the file containing the Linux mascot.
 2. Marvel at its beauty.
 
@@ -96,3 +101,5 @@ I need to highlight these ==very important words==.
 That is so funny! :smile:
 H~2~O
 X^2^
+
+$E = mc^2$
