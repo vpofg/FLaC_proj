@@ -1,4 +1,3 @@
-
 document.body.innerHTML = `
     <style>
         body {
@@ -190,13 +189,13 @@ function markdownToHtml(markdown) {
     function formatFootnotes(md) {
         const footnotes = {}; // Store footnote definitions
         const usedFootnotes = new Set(); // Track used references
-    
+
         // Extract footnote definitions
         md = md.replace(/\[\^(.*?)\]:(.*)/g, (_, label, definition) => {
             footnotes[label] = definition.trim();
             return ""; // Remove definitions from the main text
         });
-    
+
         // Replace footnote references in the text
         md = md.replace(/\[\^(.*?)\]/g, (_, label) => {
             usedFootnotes.add(label);
@@ -206,7 +205,7 @@ function markdownToHtml(markdown) {
                 return `<sup id="ref-${label}" style="color: red;">[${label} - Undefined]</sup>`;
             }
         });
-    
+
         // Generate footnote definitions section
         if (usedFootnotes.size > 0) {
             let footnoteSection = `<hr><h3>Footnotes</h3><ol>`;
@@ -214,7 +213,7 @@ function markdownToHtml(markdown) {
                 if (footnotes[label]) {
                     footnoteSection += `
                         <li id="footnote-${label}">
-                            ${footnotes[label]} 
+                            ${footnotes[label]}
                             <a href="#ref-${label}" title="Back to reference">↩</a>
                         </li>`;
                 }
@@ -222,7 +221,7 @@ function markdownToHtml(markdown) {
             footnoteSection += `</ol>`;
             md += footnoteSection;
         }
-    
+
         return md;
     }
 
@@ -282,11 +281,13 @@ function markdownToHtml(markdown) {
     }
 
     const lines = markdown.split('\n');
-    // if (lines.match(RegExp(/^(\* .*(?:\n\* .*)+)/gm))) {
-
-    // }
-
-    //errors = checkMarkers(lines);
+    if (lines.map(line => line.match(RegExp(/^(\* .*(?:\n\* .*)+)/gm)))) {
+        const modifiedLines = lines.map(line => line.startsWith('* ') ? line.replace(/^\*\s/, '').trim() : line);
+        errors = checkMarkers(modifiedLines);
+    }
+    else {
+        errors = checkMarkers(lines);
+    }
 
     if (errors.length > 0) {
         return { html: "", errors };
@@ -334,17 +335,17 @@ function markdownToHtml(markdown) {
     //markdown = markdown.replace(/(\*|\_)([a-z\s\']+)(\*|\_)/gm, "<em>$2</em>");
     markdown = markdown.replace(/__(.*?)__/g, "<strong>$1</strong>");
 
-    markdown = markdown.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-    markdown = markdown.replace(/\*([^*]+)\*/g, "<em>$1</em>");
-    markdown = markdown.replace(/_([^_]+)_/g, "<em>$1</em>");
-    markdown = markdown.replace(/~~(.*?)~~/g, "<del>$1</del>");
-
     // Replace unordered lists
     markdown = markdown.replace(/^(\s*)[\-\*\+]\s+(.*)$/gm, (_, space, item) => {
         const indentLevel = space.length / 2;
         return `<ul>${"<ul>".repeat(indentLevel)}<li>${item}</li>${"</ul>".repeat(indentLevel)}</ul>`;
     });
     markdown = markdown.replace(/<\/ul>\s*<ul>/g, "");
+
+    markdown = markdown.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    markdown = markdown.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+    markdown = markdown.replace(/_([^_]+)_/g, "<em>$1</em>");
+    markdown = markdown.replace(/~~(.*?)~~/g, "<del>$1</del>");
 
     // Replace nested ordered lists
     markdown = markdown.replace(/^(\s*)(\d+)\.\s+(.*)$/gm, (_, space, number, item) => {
