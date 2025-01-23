@@ -53,3 +53,8 @@ Generate HTML output for various Markdown elements.
 - Syntax highlighting on given language for code blocks with [Prism.js](https://prismjs.com/)
 - Parse LaTeX style notation to [MathML](https://developer.mozilla.org/en-US/docs/Web/MathML)
 
+## Running the Converter
+1. Colne the repository (git clone) to compuetr or copy the code into your editor and save the files(markdown_converter and converter.html)
+2. Double clilck the html file to open it in the browser
+3. Ready to use converter
+
