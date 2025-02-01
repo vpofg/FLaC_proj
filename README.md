@@ -27,7 +27,6 @@ Generate HTML output for various Markdown elements.
 |                       | `:emoji:`                | `Unicode emoji (e.g., 😊)`                                        | Emoji shorthand       |DONE ✅     |
 |                       |``Use `code` in file.``   | `<code>Use `code` in file.</code>`                                | Escaping Backticks    |DONE ✅     |
 |                       |                          |                                                                   | Tables                |DONE ✅     |
-|                       |`~~The world is flat.~~`  | `<del>The world is flat.</del>'.                                  | Strikethrough         |DONE ✅     |
 |                       |`==very important words==`| `<mark>very important words</mark>`                               | Highlight             |DONE ✅     |
 |                       |`H~2~O`                   | `H<sub>2</sub>O`                                                  | Subscript             |DONE ✅     |
 |                       |'X^2^`                    | `X<sup>2</sup>`                                                   | Superscript           |DONE ✅     |
